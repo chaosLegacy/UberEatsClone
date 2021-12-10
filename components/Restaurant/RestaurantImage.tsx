@@ -1,10 +1,9 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { View, Image, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { RestaurantContext } from './Restaurants';
+import { restaurant } from './Restaurants';
 
-const RestaurantImage = () => {
-    const { image_url } = useContext(RestaurantContext);
+const RestaurantImage = ({ image_url }: restaurant) => {
     return (
         <View>
             <Image source={{ uri: image_url }}

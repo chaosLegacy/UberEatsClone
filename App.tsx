@@ -1,19 +1,11 @@
 import React from 'react';
-import { Platform, StyleSheet, Text, StatusBar, SafeAreaView } from 'react-native';
+import { Platform, StyleSheet, Text, StatusBar, SafeAreaView, LogBox } from 'react-native';
 import Home from './screens/Home';
 
 export default function App() {
-  return (
-    <SafeAreaView style={styles.AndroidSafeArea}>
-      <Home />
-    </SafeAreaView>
-  );
+  // console.ignoredYellowBox = ['Require cycle: node_modules/react-native-paper'];
+  LogBox.ignoreLogs([
+    'Require cycle:'
+  ]);
+  return (<Home />);
 }
-
-const styles = StyleSheet.create({
-  AndroidSafeArea: {
-    flex: 1,
-    backgroundColor: "#eee",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
-  }
-});

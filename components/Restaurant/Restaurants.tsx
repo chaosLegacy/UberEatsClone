@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
 import RestaurantItem from './RestaurantItem'
 import { YELP_API_KEY, YELP_URL } from '@env';
 
@@ -11,7 +11,6 @@ export type restaurant = {
     reviews?: number;
     rating?: number;
 };
-export const RestaurantContext = createContext<restaurant>({});
 
 const localRestaurants: Array<restaurant> = [
     {
@@ -78,19 +77,16 @@ const Restaurants = () => {
     };
 
     useEffect(() => {
-        getRestaurantsFromYelp();
+        // getRestaurantsFromYelp();
     }, [city, activeTab])
 
     return (
         <View>
             {
                 restaurantData.map((data: restaurant, index: number) => (
-                    <RestaurantContext.Provider key={index} value={data}>
-                        <RestaurantItem key={index} />
-                    </RestaurantContext.Provider>
+                    <RestaurantItem key={index} name={data.name} image_url={data.image_url} rating={data.rating} />
                 ))
             }
-
         </View>
     )
 }

@@ -1,9 +1,8 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { View, Text } from 'react-native'
-import { RestaurantContext } from './Restaurants';
+import { restaurant } from './Restaurants';
 
-const RestaurantInfo = () => {
-    const { name, rating } = useContext(RestaurantContext);
+const RestaurantInfo = ({ name, rating }: restaurant) => {
     return (
         <View style={{
             flexDirection: 'row',
