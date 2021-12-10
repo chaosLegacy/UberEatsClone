@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "UberClone",
-    "slug": "UberClone",
+    "name": "UberEatClone",
+    "slug": "UberEatClone",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
