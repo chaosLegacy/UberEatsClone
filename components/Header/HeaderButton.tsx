@@ -27,6 +27,6 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 15,
-        fontWeight: '900'
+        fontWeight: 'bold'
     }
 });

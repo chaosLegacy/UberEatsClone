@@ -1,17 +1,21 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import Categories from '../components/Categorie/Categories';
 import HeaderTabs from '../components/Header/HeaderTabs';
 import SearchBar from '../components/Header/SearchBar';
+import Restaurants from '../components/Restaurant/Restaurants';
 
 const Home = () => {
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <View style={styles.container}>
                 <HeaderTabs />
                 <SearchBar />
             </View>
-            <Categories />
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <Categories />
+                <Restaurants />
+            </ScrollView>
         </View>
     )
 }

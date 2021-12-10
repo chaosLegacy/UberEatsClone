@@ -19,7 +19,7 @@ const CategoryItem = ({ image, text }: cat) => {
                 }} />
             <Text style={{
                 fontSize: 13,
-                fontWeight: '900'
+                fontWeight: 'bold'
             }}>{text}</Text>
         </TouchableOpacity>
     )
