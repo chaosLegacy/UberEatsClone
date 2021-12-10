@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import Categories from '../components/Categories';
+import Categories from '../components/Categorie/Categories';
 import HeaderTabs from '../components/Header/HeaderTabs';
 import SearchBar from '../components/Header/SearchBar';
 
