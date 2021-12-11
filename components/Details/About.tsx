@@ -1,36 +1,33 @@
 import React from 'react'
 import { View, Text, Image } from 'react-native'
-import { Divider } from 'react-native-elements';
-import MenuItems from '../components/About/MenuItems'
+import { restaurant } from '../Restaurant/Restaurants'
 
-const restaurant = {
+const localRestaurant = {
     name: 'Farmhouse Kitchen Thai Cuisine',
-    image: 'https://static.onecms.io/wp-content/uploads/sites/19/2017/08/17/GettyImages-545286388-2000.jpg',
+    image_url: 'https://static.onecms.io/wp-content/uploads/sites/19/2017/08/17/GettyImages-545286388-2000.jpg',
     price: '$$',
-    reviews: '1500',
+    review_count: '1500',
     rating: 4.5,
     categories: [{ title: 'Thai' }, { title: 'Comfort Food' }]
 };
-const About = () => {
-    const { name, image, price, reviews, rating, categories } = restaurant;
-    const formatCategories = categories.map(cat => cat.title).join(' • ');
-    const description = `${formatCategories} ${price ? ' • ' + price : ''} • 💳 ${rating} ⭐(${reviews})+`;
 
+const About = ({ route }: any) => {
+    const { name, image_url, price, review_count, rating, categories } = route ? route.params : localRestaurant;
+    const formatCategories = categories.map((cat: { title: string }) => cat.title).join(' • ');
+    const description = `${formatCategories} ${price ? ' • ' + price : ''} • 💳 ${rating} ⭐(${review_count})+`;
     return (
-        <View style={{ flex: 1 }}>
-            <RestaurantImage image={image} />
+        <View>
+            <RestaurantImage image_url={image_url} />
             <RestaurantName name={name} />
             <RestaurantDescription description={description} />
-            <Divider width={1} style={{ marginVertical: 20 }} />
-            <MenuItems />
         </View>
     )
 }
 
-const RestaurantImage = ({ image }: { image: string }) => {
+const RestaurantImage = ({ image_url }: restaurant) => {
     return (
         <View>
-            <Image source={{ uri: image }} style={{
+            <Image source={{ uri: image_url }} style={{
                 width: '100%',
                 height: 180
             }} />
@@ -38,7 +35,7 @@ const RestaurantImage = ({ image }: { image: string }) => {
     )
 }
 
-const RestaurantName = ({ name }: { name: string }) => {
+const RestaurantName = ({ name }: restaurant) => {
     return (
         <View>
             <Text style={{
@@ -51,7 +48,7 @@ const RestaurantName = ({ name }: { name: string }) => {
     )
 }
 
-const RestaurantDescription = ({ description }: { description: string }) => {
+const RestaurantDescription = ({ description }: restaurant) => {
     return (
         <View>
             <Text style={{

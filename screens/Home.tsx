@@ -7,7 +7,7 @@ import SearchBar from '../components/Header/SearchBar';
 import Restaurants from '../components/Restaurant/Restaurants';
 import BottomTabs from '../components/Tabs/BottomTabs';
 
-const Home = () => {
+const Home = ({ navigation }: any) => {
     return (
         <SafeAreaView style={styles.AndroidSafeArea}>
             <View style={styles.container}>
@@ -16,7 +16,7 @@ const Home = () => {
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Categories />
-                <Restaurants />
+                <Restaurants navigation={navigation} />
             </ScrollView>
             <Divider width={1} />
             <BottomTabs />

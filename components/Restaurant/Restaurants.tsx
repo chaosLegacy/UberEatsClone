@@ -1,44 +1,48 @@
-import React, { createContext, useEffect, useState } from 'react'
-import { View, Text } from 'react-native'
-import RestaurantItem from './RestaurantItem'
+import React, { useEffect, useState } from 'react'
+import { View, Text, TouchableOpacity, Image } from 'react-native'
 import { YELP_API_KEY, YELP_URL } from '@env';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+type restaurantCategory = {
+    title: string
+}
 export type restaurant = {
     name?: string;
     image_url?: string;
-    categories?: Array<string>;
+    description?: string;
+    categories?: Array<restaurantCategory>;
     price?: string;
-    reviews?: number;
+    review_count?: number;
     rating?: number;
 };
 
 const localRestaurants: Array<restaurant> = [
     {
         name: 'Soi',
-        categories: ['Chinese', 'Bar'],
+        categories: [{ title: 'Chinese' }, { title: 'Bar' }],
         image_url: 'https://static.onecms.io/wp-content/uploads/sites/19/2017/08/17/GettyImages-545286388-2000.jpg',
-        price: '$$$',
-        reviews: 1473,
+        price: '$$',
+        review_count: 1473,
         rating: 4.7
     },
     {
         name: 'La Vespa des halles',
-        categories: ['Italian', 'Bar'],
+        categories: [{ title: 'Italian' }, { title: 'Bar' }],
         image_url: 'https://img3.mashed.com/img/gallery/you-should-never-fold-pizza-slices-heres-why/l-intro-1602105889.jpg',
-        price: '$$$',
-        reviews: 379,
+        price: '$$',
+        review_count: 379,
         rating: 3.9
     },
     {
         name: 'Casa de Tacos',
-        categories: ['Mexican', 'Bar'],
+        categories: [{ title: 'Mexican' }, { title: 'Bar' }],
         image_url: 'https://www.samtell.com/hubfs/Blogs/Four-Scrumptous-Tacos-Lined-up-with-ingredients-around-them-1.jpg',
         price: '$$$',
-        reviews: 3489,
+        review_count: 3489,
         rating: 4.9
     }
 ]
-const Restaurants = () => {
+const Restaurants = ({ navigation }: any) => {
     const [restaurantData, setRestaurantData] = useState(localRestaurants);
     const [city, setCity] = useState("San Francisco");
     const [activeTab, setActiveTab] = useState("Delivery");
@@ -84,11 +88,77 @@ const Restaurants = () => {
         <View>
             {
                 restaurantData.map((data: restaurant, index: number) => (
-                    <RestaurantItem key={index} name={data.name} image_url={data.image_url} rating={data.rating} />
+                    <TouchableOpacity key={index} style={{
+                        marginTop: 20,
+                        padding: 15,
+                        backgroundColor: '#fff'
+                    }} activeOpacity={0.8
+                    } onPress={() => navigation.navigate('RestaurantDetails', {
+                        name: data.name,
+                        image_url: data.image_url,
+                        price: data.price,
+                        review_count: data.review_count,
+                        rating: data.rating,
+                        categories: data.categories
+                    })}>
+                        <RestaurantImage image_url={data.image_url} />
+                        <RestaurantInfo name={data.name} rating={data.rating} />
+                    </TouchableOpacity>
                 ))
             }
         </View>
     )
 }
 
-export default Restaurants
+const RestaurantImage = ({ image_url }: restaurant) => {
+    return (
+        <View>
+            <Image source={{ uri: image_url }}
+                style={{
+                    width: '100%',
+                    height: 180
+                }} />
+            <TouchableOpacity style={{
+                position: 'absolute',
+                top: 20,
+                right: 20
+            }}>
+                <MaterialCommunityIcon name='heart-outline' size={25} color={'#fff'} />
+            </TouchableOpacity>
+        </View>
+    )
+}
+
+const RestaurantInfo = ({ name, rating }: restaurant) => {
+    return (
+        <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: 10
+        }}>
+            <View>
+                <Text style={{
+                    fontSize: 15,
+                    fontWeight: 'bold'
+                }}>{name}</Text>
+                <Text style={{
+                    fontSize: 13,
+                    color: 'gray'
+                }}>30-45 • min</Text>
+            </View>
+            <View style={{
+                backgroundColor: '#eee',
+                height: 30,
+                width: 30,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 15
+            }}>
+                <Text style={{ fontWeight: '400' }}>{rating}</Text>
+            </View>
+        </View>
+    )
+}
+
+export default Restaurants;
