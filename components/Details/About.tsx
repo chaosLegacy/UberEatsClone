@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, Text, Image } from 'react-native'
-import { restaurant } from '../Restaurant/Restaurants'
+import { View, Text, Image } from 'react-native';
+import { restaurant } from '../../types';
 
 const localRestaurant = {
     name: 'Farmhouse Kitchen Thai Cuisine',

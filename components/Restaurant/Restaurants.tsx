@@ -2,21 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 import { YELP_API_KEY, YELP_URL } from '@env';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { restaurant as restaurantType } from '../../types';
 
-type restaurantCategory = {
-    title: string
-}
-export type restaurant = {
-    name?: string;
-    image_url?: string;
-    description?: string;
-    categories?: Array<restaurantCategory>;
-    price?: string;
-    review_count?: number;
-    rating?: number;
-};
-
-const localRestaurants: Array<restaurant> = [
+const localRestaurants: Array<restaurantType> = [
     {
         name: 'Soi',
         categories: [{ title: 'Chinese' }, { title: 'Bar' }],
@@ -87,22 +75,22 @@ const Restaurants = ({ navigation }: any) => {
     return (
         <View>
             {
-                restaurantData.map((data: restaurant, index: number) => (
+                restaurantData.map((restaurant: restaurantType, index: number) => (
                     <TouchableOpacity key={index} style={{
                         marginTop: 20,
                         padding: 15,
                         backgroundColor: '#fff'
                     }} activeOpacity={0.8
                     } onPress={() => navigation.navigate('RestaurantDetails', {
-                        name: data.name,
-                        image_url: data.image_url,
-                        price: data.price,
-                        review_count: data.review_count,
-                        rating: data.rating,
-                        categories: data.categories
+                        name: restaurant.name,
+                        image_url: restaurant.image_url,
+                        price: restaurant.price,
+                        review_count: restaurant.review_count,
+                        rating: restaurant.rating,
+                        categories: restaurant.categories
                     })}>
-                        <RestaurantImage image_url={data.image_url} />
-                        <RestaurantInfo name={data.name} rating={data.rating} />
+                        <RestaurantImage image_url={restaurant.image_url} />
+                        <RestaurantInfo name={restaurant.name} rating={restaurant.rating} />
                     </TouchableOpacity>
                 ))
             }
@@ -110,7 +98,7 @@ const Restaurants = ({ navigation }: any) => {
     )
 }
 
-const RestaurantImage = ({ image_url }: restaurant) => {
+const RestaurantImage = ({ image_url }: restaurantType) => {
     return (
         <View>
             <Image source={{ uri: image_url }}
@@ -129,7 +117,7 @@ const RestaurantImage = ({ image_url }: restaurant) => {
     )
 }
 
-const RestaurantInfo = ({ name, rating }: restaurant) => {
+const RestaurantInfo = ({ name, rating }: restaurantType) => {
     return (
         <View style={{
             flexDirection: 'row',

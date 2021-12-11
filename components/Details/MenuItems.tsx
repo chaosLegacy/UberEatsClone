@@ -2,14 +2,13 @@ import React from 'react'
 import { View, Text, StyleSheet, Image, ScrollView } from 'react-native'
 import { Divider } from 'react-native-elements';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import { food as foodType } from '../../types';
+import { useDispatch } from 'react-redux';
+import { actions } from '../../redux/reducer';
+import { useSelector } from '../../redux/store';
 
-export type food = {
-    title?: string;
-    description?: string;
-    price?: string;
-    image?: string;
-}
-const foods: Array<food> = [
+
+const foods: Array<foodType> = [
     {
         title: "Lasagna",
         description: "With butter lettuce, tomato and sauce bechamel",
@@ -39,24 +38,29 @@ const foods: Array<food> = [
         price: "$21.50",
         image:
             "https://images.themodernproper.com/billowy-turkey/production/posts/2019/Easy-italian-salad-recipe-10.jpg?w=1200&h=1200&q=82&fm=jpg&fit=crop&fp-x=0.5&fp-y=0.5&dm=1614096227&s=c0f63a30cef3334d97f9ecad14be51da",
-    },
-    {
-        title: "Lasagna",
-        description: "With butter lettuce, tomato and sauce bechamel",
-        price: "$13.50",
-        image:
-            "https://thestayathomechef.com/wp-content/uploads/2017/08/Most-Amazing-Lasagna-2-e1574792735811.jpg",
-    },
+    }
 ];
 
 const MenuItems = () => {
+    const dispatch = useDispatch();
+    const { cart } = useSelector(state => state);
+    const { selectedItems } = cart;
+    const setItem = (item: foodType, isChecked: boolean) => {
+        isChecked ? dispatch(actions.addToCart(item)) : dispatch(actions.removeFromCart(item));
+    }
+    const isItemInCart = (item: foodType, cartItems: Array<foodType> = selectedItems) => {
+        return Boolean(cartItems.find(itm => itm.title === item.title));
+    }
+
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             {
-                foods.map((food: food, index: number) => (
+                foods.map((food: foodType, index: number) => (
                     <View key={index}>
                         <View style={styles.menuItemsStyle}>
                             <BouncyCheckbox
+                                onPress={(isChecked: boolean) => setItem(food, isChecked)}
+                                isChecked={isItemInCart(food)}
                                 iconStyle={{ borderColor: 'lightgray', borderRadius: 0 }}
                                 fillColor='green' />
                             <FoodInfo {...food} />
@@ -71,7 +75,7 @@ const MenuItems = () => {
     )
 };
 
-const FoodInfo = (food: food) => {
+const FoodInfo = (food: foodType) => {
     const { title, description, price } = food;
     return (
         <View style={{
@@ -85,7 +89,7 @@ const FoodInfo = (food: food) => {
     )
 };
 
-const FoodImage = (food: food) => (
+const FoodImage = (food: foodType) => (
     <View>
         <Image source={{ uri: food.image }}
             style={{
