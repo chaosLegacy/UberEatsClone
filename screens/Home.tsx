@@ -6,8 +6,12 @@ import HeaderTabs from '../components/Header/HeaderTabs';
 import SearchBar from '../components/Header/SearchBar';
 import Restaurants from '../components/Restaurant/Restaurants';
 import BottomTabs from '../components/Tabs/BottomTabs';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types';
 
-const Home = ({ navigation }: any) => {
+type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
+
+const Home = ({ navigation, route }: any) => {
     return (
         <SafeAreaView style={styles.AndroidSafeArea}>
             <View style={styles.container}>
@@ -19,7 +23,7 @@ const Home = ({ navigation }: any) => {
                 <Restaurants navigation={navigation} />
             </ScrollView>
             <Divider width={1} />
-            <BottomTabs />
+            {/* <BottomTabs /> */}
         </SafeAreaView>
     )
 }

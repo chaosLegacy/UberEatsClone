@@ -3,10 +3,13 @@ import React, { useState } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useSelector } from '../../redux/store';
 import CheckoutModal from './CheckoutModal';
+import LottieView from 'lottie-react-native';
+import Loader from '../Loader';
 
 
 const ViewCart = ({ navigation }: any) => {
-    const [modalVisible, setModalVIsible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
     const { cart } = useSelector(state => state);
     const { selectedItems } = cart;
 
@@ -14,7 +17,13 @@ const ViewCart = ({ navigation }: any) => {
     const totalPrice = numbro(total).formatCurrency();
     return (
         <>
-            <CheckoutModal modalVisible={modalVisible} setModalVIsible={setModalVIsible} totalPrice={totalPrice} />
+            <Loader loading={loading} />
+            <CheckoutModal
+                navigation={navigation}
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                setLoading={setLoading}
+                totalPrice={totalPrice} />
             {
                 selectedItems.length ? (
                     <View style={{
@@ -32,7 +41,7 @@ const ViewCart = ({ navigation }: any) => {
                             width: '100%'
                         }}>
                             <TouchableOpacity
-                                onPress={() => setModalVIsible(true)}
+                                onPress={() => setModalVisible(true)}
                                 activeOpacity={.8}
                                 style={{
                                     backgroundColor: 'black',
@@ -51,11 +60,9 @@ const ViewCart = ({ navigation }: any) => {
                     </View>
                 ) : <></>
             }
-
         </>
-
     )
 }
 
 
-export default ViewCart
+export default ViewCart;

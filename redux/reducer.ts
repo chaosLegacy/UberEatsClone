@@ -1,3 +1,4 @@
+import { localRestaurants } from './constants';
 import { createSlice } from "@reduxjs/toolkit";
 import { State } from "../types";
 
@@ -5,7 +6,10 @@ import { State } from "../types";
 // Redux store starting state
 const initialState: State = {
     error: '',
+    activeHeaderTab: '',
+    searchCity: '',
     user: null,
+    restaurants: localRestaurants,
     cart: {
         selectedItems: []
     }
@@ -17,6 +21,9 @@ export const { actions, reducer } = createSlice({
     initialState,
     reducers: {
         set: (state, action) => ({ ...state, ...action.payload }),
+        setRestaurants: (state, action) => {
+            state.restaurants = action.payload
+        },
         addToCart: (state, action) => {
             state.cart = {
                 selectedItems: [

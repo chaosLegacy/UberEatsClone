@@ -1,3 +1,11 @@
+export type RootStackParamList = {
+    Home: undefined;
+    Profile: { userId: string };
+    Feed: { sort: 'latest' | 'top' } | undefined;
+};
+
+export type RestaurantParamList = restaurant;
+
 export type food = {
     title?: string;
     description?: string;
@@ -33,6 +41,9 @@ export type Cart = {
 
 export type State = {
     error: string;
+    activeHeaderTab: string;
+    searchCity: string;
     user: null | User,
+    restaurants: Array<restaurant>,
     cart: Cart
 }

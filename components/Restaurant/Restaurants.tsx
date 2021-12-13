@@ -2,42 +2,21 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 import { YELP_API_KEY, YELP_URL } from '@env';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { restaurant as restaurantType } from '../../types';
+import { restaurant as restaurantType, RestaurantParamList } from '../../types';
+import { useSelector } from '../../redux/store';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useDispatch } from 'react-redux';
+import { actions } from '../../redux/reducer';
 
-const localRestaurants: Array<restaurantType> = [
-    {
-        name: 'Soi',
-        categories: [{ title: 'Chinese' }, { title: 'Bar' }],
-        image_url: 'https://static.onecms.io/wp-content/uploads/sites/19/2017/08/17/GettyImages-545286388-2000.jpg',
-        price: '$$',
-        review_count: 1473,
-        rating: 4.7
-    },
-    {
-        name: 'La Vespa des halles',
-        categories: [{ title: 'Italian' }, { title: 'Bar' }],
-        image_url: 'https://img3.mashed.com/img/gallery/you-should-never-fold-pizza-slices-heres-why/l-intro-1602105889.jpg',
-        price: '$$',
-        review_count: 379,
-        rating: 3.9
-    },
-    {
-        name: 'Casa de Tacos',
-        categories: [{ title: 'Mexican' }, { title: 'Bar' }],
-        image_url: 'https://www.samtell.com/hubfs/Blogs/Four-Scrumptous-Tacos-Lined-up-with-ingredients-around-them-1.jpg',
-        price: '$$$',
-        review_count: 3489,
-        rating: 4.9
-    }
-]
+// type Props = NativeStackScreenProps<RestaurantParamList, 'RestaurantDetails'>;
+
 const Restaurants = ({ navigation }: any) => {
-    const [restaurantData, setRestaurantData] = useState(localRestaurants);
-    const [city, setCity] = useState("San Francisco");
-    const [activeTab, setActiveTab] = useState("Delivery");
+    const { activeHeaderTab, searchCity, restaurants } = useSelector((state) => state);
     const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
 
     const getRestaurantsFromYelp = async () => {
-        const yelpUrl = `${YELP_URL}?term=restaurants&location=${city}`;
+        const yelpUrl = `${YELP_URL}?term=restaurants&location=${searchCity}`;
         try {
             const res = await fetch(`${yelpUrl}/`, {
                 method: 'GET',
@@ -52,12 +31,14 @@ const Restaurants = ({ navigation }: any) => {
 
             setLoading(false);
             console.log(response.businesses);
-            setRestaurantData(
-                response.businesses.filter((business: any) =>
-                    business.transactions.includes(activeTab.toLowerCase())
-                )
-            )
+            const data = response.businesses.filter((business: any) =>
+                business.transactions.includes(activeHeaderTab.toLowerCase())
+            );
+            if (data)
+                dispatch(actions.setRestaurants(data));
+
             if (response.status >= 300 || response.errors) {
+                dispatch(actions.set({ error: `${res.url}\n\n${JSON.stringify(response, null, 2)}` }));
                 return { error: response };
             }
             return { response: response };
@@ -69,13 +50,14 @@ const Restaurants = ({ navigation }: any) => {
     };
 
     useEffect(() => {
-        // getRestaurantsFromYelp();
-    }, [city, activeTab])
+        if (!searchCity) return; //TODO make the search automatic based on the user region
+        getRestaurantsFromYelp();
+    }, [activeHeaderTab, searchCity])
 
     return (
         <View>
             {
-                restaurantData.map((restaurant: restaurantType, index: number) => (
+                restaurants.map((restaurant: restaurantType, index: number) => (
                     <TouchableOpacity key={index} style={{
                         marginTop: 20,
                         padding: 15,
