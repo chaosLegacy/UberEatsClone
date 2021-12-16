@@ -13,6 +13,9 @@ import AboutScreen from './screens/AboutScreen';
 import BrowseScreen from './screens/BrowseScreen';
 import GroceryScreen from './screens/GroceryScreen';
 import OrdersScreen from './screens/OrdersScreen';
+import RecoverScreen from './screens/Auth/RecoverScreen';
+import SignUpScreen from './screens/Auth/SignUpScreen';
+import SignInScreen from './screens/Auth/SignInScreen';
 
 export default function RootNavigation() {
     const Stack = createNativeStackNavigator();
@@ -23,69 +26,106 @@ export default function RootNavigation() {
         headerShown: false
     };
 
-
-    const createHomeStack = () => (
-        <Stack.Navigator screenOptions={screenOptions} >
-            <Stack.Screen name='Home1' children={createDrawer} />
-            <Stack.Screen name='RestaurantDetails' component={RestaurantDetails} />
-            <Stack.Screen name='OrderCompleted' component={OrderCompleted} />
-        </Stack.Navigator>
-    )
     const createDrawer = () => (
-        <Drawer.Navigator initialRouteName='Home' screenOptions={screenOptions}>
+        <Drawer.Navigator initialRouteName='Profile' screenOptions={screenOptions}>
             <Drawer.Screen name='Home' component={Home} />
             <Drawer.Screen name="Profile" component={AccountScreen} />
             <Drawer.Screen name="About" component={AboutScreen} />
         </Drawer.Navigator>
     );
-    return (
-        <NavigationContainer>
 
-            <Tab.Navigator tabBarPosition='bottom'
-                screenOptions={{
-                    swipeEnabled: true,
-                    tabBarShowLabel: false,
-                    tabBarActiveTintColor: '#333',
-                    tabBarLabelStyle: { fontSize: 12 },
-                    tabBarStyle: { backgroundColor: '#fff' },
-                    tabBarIndicatorStyle: {
-                        backgroundColor: '#eee'
-                    }
-                }}
-                style={{}}>
-                <Tab.Screen name='Home2' children={createHomeStack} options={{
+    const createHomeStack = () => (
+        <Stack.Navigator screenOptions={screenOptions} >
+            <Stack.Screen name='Home' component={Home} />
+            <Stack.Screen name='RestaurantDetails' component={RestaurantDetails} />
+            <Stack.Screen name='OrderCompleted' component={OrderCompleted} />
+        </Stack.Navigator>
+    )
+
+    const createAuthStack = () => (
+        <Stack.Navigator screenOptions={screenOptions} >
+            <Stack.Screen name='SignIn' component={SignInScreen} />
+            <Stack.Screen name='SignUp' component={SignUpScreen} />
+            <Stack.Screen name='Recover' component={RecoverScreen} />
+        </Stack.Navigator>
+    )
+
+    const createTabStack = () => (
+        <Tab.Navigator
+            initialRouteName='HomeTab'
+            tabBarPosition='bottom'
+            screenOptions={{
+                swipeEnabled: true,
+                tabBarShowLabel: false,
+                tabBarActiveTintColor: '#333',
+                tabBarLabelStyle: { fontSize: 12 },
+                tabBarStyle: { backgroundColor: '#fff' },
+                tabBarIndicatorStyle: {
+                    backgroundColor: '#eee'
+                }
+            }}>
+            <Tab.Screen
+                name='HomeTab'
+                component={createHomeStack}
+                options={{
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons name="home" color={color} size={26} />
                     ),
                 }} />
-                <Tab.Screen name='Browse' component={BrowseScreen}
-                    options={{
-                        tabBarIcon: ({ color }) => (
-                            <MaterialCommunityIcons name="magnify" color={color} size={26} />
-                        ),
-                    }} />
-                <Tab.Screen name='Grocery' component={GroceryScreen}
-                    options={{
-                        tabBarIcon: ({ color }) => (
-                            <MaterialCommunityIcons name="basket" color={color} size={26} />
-                        ),
-                    }}
-                />
-                <Tab.Screen name='Orders' component={OrdersScreen} options={{
+            <Tab.Screen
+                name='BrowseTab'
+                component={BrowseScreen}
+                options={{
+                    tabBarIcon: ({ color }) => (
+                        <MaterialCommunityIcons name="magnify" color={color} size={26} />
+                    ),
+                }} />
+            <Tab.Screen
+                name='GroceryTab'
+                component={GroceryScreen}
+                options={{
+                    tabBarIcon: ({ color }) => (
+                        <MaterialCommunityIcons name="basket" color={color} size={26} />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name='OrdersTab'
+                component={OrdersScreen}
+                options={{
                     tabBarLabel: 'Orders',
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons name="receipt" color={color} size={26} />
                     ),
                 }}
-                />
-                <Tab.Screen name='Account' component={AccountScreen} options={{
+            />
+            <Tab.Screen
+                name='AccountTab'
+                component={createDrawer}
+                listeners={
+                    ({ navigation }) => ({
+                        tabPress: (event) => {
+                            event.preventDefault();
+                            navigation.navigate('AccountTab', { screen: 'AccountTab' })
+                        }
+                    })
+                }
+                options={{
                     tabBarLabel: 'Profile',
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons name="account" color={color} size={26} />
                     ),
                 }}
-                />
-            </Tab.Navigator>
+            />
+        </Tab.Navigator>
+    )
+
+    return (
+        <NavigationContainer>
+            <Stack.Navigator screenOptions={screenOptions} initialRouteName='AuthStack'>
+                <Stack.Screen name='HomeStack' component={createTabStack} />
+                <Stack.Screen name='AuthStack' component={createAuthStack} />
+            </Stack.Navigator>
         </NavigationContainer>
     )
 }

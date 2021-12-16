@@ -1,5 +1,5 @@
 import React from 'react'
-import { Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, View } from 'react-native'
+import { Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
 import { Divider } from 'react-native-elements';
 import Categories from '../components/Categorie/Categories';
 import HeaderTabs from '../components/Header/HeaderTabs';
@@ -8,6 +8,7 @@ import Restaurants from '../components/Restaurant/Restaurants';
 import BottomTabs from '../components/Tabs/BottomTabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
+import { auth } from '../firebase';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 

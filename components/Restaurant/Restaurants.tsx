@@ -30,11 +30,11 @@ const Restaurants = ({ navigation }: any) => {
             const response = await res.json();
 
             setLoading(false);
-            console.log(response.businesses);
             const data = response.businesses.filter((business: any) =>
                 business.transactions.includes(activeHeaderTab.toLowerCase())
             );
-            if (data)
+            // console.log(data);
+            if (data && data.length)
                 dispatch(actions.setRestaurants(data));
 
             if (response.status >= 300 || response.errors) {
@@ -51,7 +51,10 @@ const Restaurants = ({ navigation }: any) => {
 
     useEffect(() => {
         if (!searchCity) return; //TODO make the search automatic based on the user region
-        getRestaurantsFromYelp();
+        const unsubscribe = getRestaurantsFromYelp();
+        return () => {
+            unsubscribe
+        }
     }, [activeHeaderTab, searchCity])
 
     return (

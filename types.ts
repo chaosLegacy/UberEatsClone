@@ -31,7 +31,9 @@ export type User = {
     id: string;
     name: string;
     email: string;
-    picture?: string;
+    familyName?: string;
+    givenName?: string;
+    photoUrl?: string;
 }
 
 export type Cart = {
