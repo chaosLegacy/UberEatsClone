@@ -12,7 +12,7 @@ const RecoverScreen = ({ navigation }: any) => {
     const handleRecover = async () => {
         try {
             await sendPasswordResetEmail(auth, email);
-            navigation.navigate('AuthStack');
+            navigation.navigate('SignIn');
         } catch (error: any) {
             alert(error.message);
         }
