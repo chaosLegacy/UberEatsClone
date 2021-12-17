@@ -16,6 +16,7 @@ import OrdersScreen from './screens/OrdersScreen';
 import RecoverScreen from './screens/Auth/RecoverScreen';
 import SignUpScreen from './screens/Auth/SignUpScreen';
 import SignInScreen from './screens/Auth/SignInScreen';
+import SplashScreen from './screens/SplashScreen';
 
 export default function RootNavigation() {
     const Stack = createNativeStackNavigator();
@@ -122,7 +123,8 @@ export default function RootNavigation() {
 
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={screenOptions} initialRouteName='AuthStack'>
+            <Stack.Navigator screenOptions={screenOptions} initialRouteName='SplashScreen'>
+                <Stack.Screen name='SplashScreen' component={SplashScreen} />
                 <Stack.Screen name='HomeStack' component={createTabStack} />
                 <Stack.Screen name='AuthStack' component={createAuthStack} />
             </Stack.Navigator>

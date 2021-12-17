@@ -9,6 +9,7 @@ const initialState: State = {
     activeHeaderTab: '',
     searchCity: '',
     user: null,
+    location: null,
     restaurants: localRestaurants,
     cart: {
         selectedItems: []

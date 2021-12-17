@@ -1,3 +1,5 @@
+import * as Location from 'expo-location';
+
 export type RootStackParamList = {
     Home: undefined;
     Profile: { userId: string };
@@ -46,6 +48,7 @@ export type State = {
     activeHeaderTab: string;
     searchCity: string;
     user: null | User,
+    location: null | Location.LocationObject,
     restaurants: Array<restaurant>,
     cart: Cart
 }

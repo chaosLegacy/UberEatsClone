@@ -11,12 +11,26 @@ import { actions } from '../../redux/reducer';
 // type Props = NativeStackScreenProps<RestaurantParamList, 'RestaurantDetails'>;
 
 const Restaurants = ({ navigation }: any) => {
-    const { activeHeaderTab, searchCity, restaurants } = useSelector((state) => state);
+    const { activeHeaderTab, searchCity, restaurants, location } = useSelector((state) => state);
+    const totalItems = Array.isArray(restaurants) ? restaurants.length : 0;
+    const [offset, setOffset] = useState(0);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [allLoaded, setAllLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
 
+    const generateYelpURL = (): { isDefined: boolean, link: string } => {
+        const customSearch = searchCity ? `location=${searchCity}` : (location ? `latitude=${location.coords.latitude}&longitude=${location.coords.longitude}` : undefined);
+        const yelpUrl = `${YELP_URL}?term=restaurants&${customSearch}&limit=${5}&offset=${offset}`;
+        console.log(yelpUrl);
+        return {
+            isDefined: !!customSearch,
+            link: yelpUrl
+        }
+    }
+
     const getRestaurantsFromYelp = async () => {
-        const yelpUrl = `${YELP_URL}?term=restaurants&location=${searchCity}`;
+        const yelpUrl = generateYelpURL().link;
         try {
             const res = await fetch(`${yelpUrl}/`, {
                 method: 'GET',
@@ -30,10 +44,11 @@ const Restaurants = ({ navigation }: any) => {
             const response = await res.json();
 
             setLoading(false);
+
             const data = response.businesses.filter((business: any) =>
                 business.transactions.includes(activeHeaderTab.toLowerCase())
             );
-            // console.log(data);
+            console.log(data);
             if (data && data.length)
                 dispatch(actions.setRestaurants(data));
 
@@ -50,7 +65,7 @@ const Restaurants = ({ navigation }: any) => {
     };
 
     useEffect(() => {
-        if (!searchCity) return; //TODO make the search automatic based on the user region
+        if (!generateYelpURL().isDefined) return;
         const unsubscribe = getRestaurantsFromYelp();
         return () => {
             unsubscribe
